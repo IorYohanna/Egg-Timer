@@ -9,6 +9,8 @@ function createWindow() {
     height: 800,
     frame: false,
     titleBarStyle: "hidden",
+    resizable: false,      
+    maximizable: false,
     webPreferences: {
       preload: __dirname + "/preload.js",
       autoplayPolicy: 'no-user-gesture-required',
