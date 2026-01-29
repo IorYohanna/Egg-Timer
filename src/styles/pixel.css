@@ -1,0 +1,91 @@
+:root {
+  --border: 3px solid #1c1917;
+  --shadow-big: 8px 8px 0 0 #1c1917;
+  --shadow-small: 4px 4px 0 0 #1c1917;
+}
+
+/* Boutons rétro */
+.btn-retro {
+  border: var(--border);
+  box-shadow: var(--shadow-small);
+  transition: all 0.1s ease;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+}
+
+.btn-retro:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+/* Carte principale */
+.pixel-card {
+  border: var(--border);
+  box-shadow: var(--shadow-big);
+}
+
+/* Egg crack smooth */
+.egg-cracked .egg-shell-top {
+  transform: translateY(-12px) rotate(-15deg);
+  transition: transform 0.6s ease-in-out;
+}
+
+.egg-cracked .egg-yolk {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* Si tu veux un petit “shake” avant de craquer */
+.egg-shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes bounce-slight {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6%);
+  }
+}
+
+.animate-bounce-slight {
+  animation: bounce-slight 0.6s infinite;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
