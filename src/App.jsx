@@ -26,7 +26,7 @@ export default function App() {
   const format = (s) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")} : ${String(s % 60).padStart(
       2,
-      "0"
+      "0",
     )}`;
 
   return (
@@ -39,7 +39,25 @@ export default function App() {
               Cute Egg timer ^^
             </span>
           </div>
-          <Icon icon="solar:battery-full-linear" width={20} className="opacity-30" />
+
+          {/* Window controls */}
+          <div className="flex items-center gap-2 no-drag">
+            <button
+              onClick={() => window.electronAPI?.minimizeApp()}
+              className="opacity-40 hover:opacity-100 transition"
+              title="Minimize"
+            >
+              <Icon icon="solar:minimize-square-linear" width={20} />
+            </button>
+
+            <button
+              onClick={() => window.electronAPI?.closeApp()}
+              className="opacity-40 hover:opacity-100 transition"
+              title="Close"
+            >
+              <Icon icon="solar:close-circle-linear" width={20} />
+            </button>
+          </div>
         </div>
 
         <EggVisual

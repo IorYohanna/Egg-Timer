@@ -13,7 +13,7 @@ const EggVisual = ({ running, cracked }) => {
   }, [cracked]);
 
   return (
-    <div className="w-full h-75 flex justify-center items-center relative bg-[#FAF7F2] rounded-xl overflow-hidden">
+    <div className="w-full h-70 flex justify-center items-center relative bg-[#FAF7F2] rounded-xl overflow-hidden">
       <Icon
         icon="emojione-v1:cloud"
         className="absolute top-4 left-6 opacity-30"

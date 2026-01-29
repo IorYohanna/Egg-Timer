@@ -23,6 +23,11 @@ ipcMain.on("close-app", () => {
   if (mainWindow) mainWindow.close();
 });
 
+ipcMain.on("minimize-app", () => {
+  if (mainWindow) mainWindow.minimize();
+});
+
+
 app.whenReady().then(() => {
   createWindow();
   setInterval(detectSiteUsage, 5000);
