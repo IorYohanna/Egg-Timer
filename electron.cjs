@@ -11,6 +11,7 @@ function createWindow() {
     titleBarStyle: "hidden",
     webPreferences: {
       preload: __dirname + "/preload.js",
+      autoplayPolicy: 'no-user-gesture-required',
       nodeIntegration: false,
       contextIsolation: true,
     },

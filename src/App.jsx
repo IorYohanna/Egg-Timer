@@ -1,33 +1,65 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import EggVisual from "./components/EggVisual";
 import ProgressBar from "./components/ProgressBar";
 import { useEggTimer } from "./hooks/useEggTimer";
 import { Icon } from "@iconify/react";
+import { useEffect, useRef, useState } from "react";
+import homeSongFile from "./assets/homeSong.mp3";
+import breakSongFile from "./assets/breakSong.mp3";
 import "./styles/pixel.css";
-import { useState } from "react";
 
 export default function App() {
-  const { totalTime, timeLeft, isRunning, start, pause, reset, setTimer } =
-    useEggTimer();
+  const { totalTime, timeLeft, isRunning, start, pause, reset, setTimer } = useEggTimer();
 
   const [customMin, setCustomMin] = useState("");
   const [customSec, setCustomSec] = useState("");
 
+  const homeAudio = useRef(new Audio(homeSongFile));
+  const breakAudio = useRef(new Audio(breakSongFile));
+
+  useEffect(() => {
+    homeAudio.current.loop = true;
+    breakAudio.current.loop = true;
+    homeAudio.current.volume = 0.4;
+    breakAudio.current.volume = 0.4;
+    return () => {
+      homeAudio.current.pause();
+      breakAudio.current.pause();
+    };
+  }, []);
+
+  useEffect(() => {
+    const syncAudio = async () => {
+      try {
+        const isPausedMidway =
+          !isRunning && timeLeft > 0 && timeLeft < totalTime;
+
+        if (isPausedMidway) {
+          homeAudio.current.pause();
+          await breakAudio.current.play();
+        } else {
+          breakAudio.current.pause();
+          await homeAudio.current.play();
+        }
+      } catch (err) {
+        console.log("Interaction utilisateur requise pour l'audio: ", err);
+      }
+    };
+
+    syncAudio();
+  }, [isRunning, timeLeft, totalTime]);
+
   const applyCustomTime = (m, s) => {
     const minutes = parseInt(m) || 0;
     const seconds = parseInt(s) || 0;
-
     if (minutes === 0 && seconds === 0) return;
-
     setTimer(minutes * 60 + seconds);
   };
 
   const cracked = totalTime > 0 && timeLeft === 0;
 
   const format = (s) =>
-    `${String(Math.floor(s / 60)).padStart(2, "0")} : ${String(s % 60).padStart(
-      2,
-      "0",
-    )}`;
+    `${String(Math.floor(s / 60)).padStart(2, "0")} : ${String(s % 60).padStart(2,"0",)}`;
 
   return (
     <div className="flex items-center justify-center h-200 w-150 mx-auto drag-region bg-opacity-0.5 ">
@@ -40,7 +72,6 @@ export default function App() {
             </span>
           </div>
 
-          {/* Window controls */}
           <div className="flex items-center gap-2 no-drag">
             <button
               onClick={() => window.electronAPI?.minimizeApp()}
@@ -49,7 +80,6 @@ export default function App() {
             >
               <Icon icon="solar:minimize-square-linear" width={20} />
             </button>
-
             <button
               onClick={() => window.electronAPI?.closeApp()}
               className="opacity-40 hover:opacity-100 transition"
@@ -104,25 +134,20 @@ export default function App() {
 
         <div className="flex items-center justify-center gap-3 text-[10px] font-bold no-drag">
           <span className="text-[#FAF7F2] tracking-widest">CUSTOM:</span>
-
           <div className="flex items-center gap-2 text-[#FAF7F2] ">
             <input
               type="number"
-              min="0"
-              max="99"
               placeholder="MM"
               value={customMin}
               onChange={(e) => {
                 setCustomMin(e.target.value);
                 applyCustomTime(e.target.value, customSec);
               }}
-              className="w-10 text-center text-[#FAF7F2]  border-2 border-ink bg-transparent rounded px-1 py-1 focus:outline-none placeholder:text-[#FAF7F2] "
+              className="w-10 text-center text-[#FAF7F2] border-2 border-ink bg-transparent rounded px-1 py-1 focus:outline-none placeholder:text-[#FAF7F2] "
             />
             <span>:</span>
             <input
               type="number"
-              min="0"
-              max="59"
               placeholder="SS"
               value={customSec}
               onChange={(e) => {
@@ -145,7 +170,6 @@ export default function App() {
             />
             {isRunning ? "PAUSE" : "START"}
           </button>
-
           <button
             onClick={reset}
             className="btn-retro bg-white py-4 rounded-xl text-xs flex items-center justify-center gap-1"
